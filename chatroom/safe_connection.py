@@ -4,7 +4,7 @@ import socket
 
 class SafeConnection:
     def __init__(self, connection):
-        self._connection = connection
+        self._connection: socket.socket = connection
         self._done = False
 
     def fileno(self):
@@ -24,6 +24,10 @@ class SafeConnection:
 
     def send(self, data):
         return self._safe_call(self._connection.send, 0, data)
+
+    def close(self):
+        self._done = True
+        self._connection.close()
 
     def done(self):
         return self._done
